@@ -88,23 +88,50 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
+    <!-- Nav Item - Company Management -->
+    @canany(['branches.view', 'company.settings.view'])
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCompanyManagement" aria-expanded="true" aria-controls="collapseCompanyManagement">
+            <i class="fas fa-fw fa-building"></i>
+            <span>{{ trans('messages.Company Management') }}</span>
+        </a>
+        <div id="collapseCompanyManagement" class="collapse" aria-labelledby="headingCompanyManagement" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">{{ trans('messages.Company Options') }}:</h6>
+                @can('branches.view')
+                <a class="collapse-item" href="{{ route('branches.index') }}">{{ trans('messages.Branches') }}</a>
+                @endcan
+                @can('company.settings.view')
+                <a class="collapse-item" href="{{ route('company-settings.index') }}">{{ trans('messages.Company Settings') }}</a>
+                @endcan
+                @can('legal.documents.view')
+                <a class="collapse-item" href="{{ route('legal-documents.index') }}">{{ trans('messages.Legal Documents') }}</a>
+                @endcan
+            </div>
+        </div>
+    </li>
+    @endcanany
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
     <!-- Heading -->
     <div class="sidebar-heading">
-        {{ __('Reports') }}
+        {{ trans('messages.Reports') }}
     </div>
 
     <!-- Nav Item - Reports -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReports" aria-expanded="true" aria-controls="collapseReports">
             <i class="fas fa-fw fa-chart-area"></i>
-            <span>{{ __('Reports') }}</span>
+            <span>{{ trans('messages.Reports') }}</span>
         </a>
         <div id="collapseReports" class="collapse" aria-labelledby="headingReports" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">{{ __('Report Categories') }}:</h6>
-                <a class="collapse-item" href="#">{{ __('Employee Reports') }}</a>
-                <a class="collapse-item" href="#">{{ __('Department Reports') }}</a>
-                <a class="collapse-item" href="#">{{ __('Salary Reports') }}</a>
+                <h6 class="collapse-header">{{ trans('messages.Report Categories') }}:</h6>
+                <a class="collapse-item" href="#">{{ trans('messages.Employee Reports') }}</a>
+                <a class="collapse-item" href="#">{{ trans('messages.Department Reports') }}</a>
+                <a class="collapse-item" href="#">{{ trans('messages.Salary Reports') }}</a>
             </div>
         </div>
     </li>

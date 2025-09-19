@@ -83,10 +83,43 @@ Route::middleware(['auth', 'tenant'])->group(function () {
         'user-management' => 'user'
     ]);
     
-    // Roles Permissions Map
-    Route::get('roles-permissions-map', function() {
-        return view('roles.permissions-map');
-    })->name('roles.permissions-map');
+        // Roles Permissions Map
+        Route::get('roles-permissions-map', function() {
+            return view('roles.permissions-map');
+        })->name('roles.permissions-map');
+
+        // Company Management Routes
+        Route::resource('branches', App\Http\Controllers\BranchController::class);
+        Route::resource('company-settings', App\Http\Controllers\CompanySettingController::class);
+        Route::resource('legal-documents', App\Http\Controllers\LegalDocumentController::class);
+        
+        // Company Settings as singular route (redirect to index)
+        Route::get('company-setting', function() {
+            return redirect()->route('company-settings.index');
+        })->name('company-setting.index');
+        
+        // Legal Documents additional routes
+        Route::patch('legal-documents/{legalDocument}/status', [App\Http\Controllers\LegalDocumentController::class, 'updateStatus'])->name('legal-documents.update-status');
+        Route::get('legal-documents/{legalDocument}/download', [App\Http\Controllers\LegalDocumentController::class, 'download'])->name('legal-documents.download');
+        
+        // API route for manual expiry check
+        Route::post('api/legal-documents/check-expiry', function() {
+            try {
+                \Artisan::call('documents:check-expiry', ['--days' => 30]);
+                $output = \Artisan::output();
+                
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Document expiry check completed successfully.',
+                    'output' => $output
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error running expiry check: ' . $e->getMessage()
+                ], 500);
+            }
+        })->name('api.legal-documents.check-expiry');
     
     // Additional API Routes for Roles & Permissions
     Route::prefix('api')->name('api.')->group(function () {
