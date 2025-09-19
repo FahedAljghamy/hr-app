@@ -48,11 +48,21 @@ class UserSeeder extends Seeder
 
             // Create sample employees for each tenant
             $employeeCount = rand(5, min(20, $tenant->max_employees));
+            $usedEmails = [];
             
             for ($i = 1; $i <= $employeeCount; $i++) {
                 $firstName = $this->getRandomFirstName();
                 $lastName = $this->getRandomLastName();
-                $email = strtolower($firstName . '.' . $lastName . '@' . $tenant->domain);
+                $baseEmail = strtolower($firstName . '.' . $lastName . '@' . $tenant->domain);
+                
+                // Ensure unique email
+                $email = $baseEmail;
+                $counter = 1;
+                while (in_array($email, $usedEmails)) {
+                    $email = strtolower($firstName . '.' . $lastName . $counter . '@' . $tenant->domain);
+                    $counter++;
+                }
+                $usedEmails[] = $email;
 
                 User::create([
                     'name' => $firstName . ' ' . $lastName,
