@@ -1,0 +1,793 @@
+{
+	"info": {
+		"_postman_id": "hr-system-roles-permissions",
+		"name": "HR System - Roles & Permissions API",
+		"description": "Author: Eng.Fahed\nCollection for testing HR System Roles & Permissions endpoints\nمجموعة اختبارات API لنظام الأدوار والصلاحيات",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{auth_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    pm.collectionVariables.set('auth_token', 'session_token');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "superadmin@hrsystem.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "تسجيل الدخول للحصول على session token"
+					}
+				}
+			],
+			"description": "Authentication endpoints"
+		},
+		{
+			"name": "Roles Management",
+			"item": [
+				{
+					"name": "Get All Roles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/roles",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles"
+							]
+						},
+						"description": "عرض جميع الأدوار"
+					}
+				},
+				{
+					"name": "Get Role by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/roles/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles",
+								"1"
+							]
+						},
+						"description": "عرض دور محدد بالمعرف"
+					}
+				},
+				{
+					"name": "Create Role",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"HR Manager\",\n    \"permissions\": [\n        \"employees.view\",\n        \"employees.create\",\n        \"employees.edit\",\n        \"attendance.view\",\n        \"leaves.view\",\n        \"leaves.approve\"\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/roles",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles"
+							]
+						},
+						"description": "إنشاء دور جديد مع صلاحيات"
+					}
+				},
+				{
+					"name": "Update Role",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Senior HR Manager\",\n    \"permissions\": [\n        \"employees.view\",\n        \"employees.create\",\n        \"employees.edit\",\n        \"employees.delete\",\n        \"attendance.view\",\n        \"attendance.edit\",\n        \"leaves.view\",\n        \"leaves.approve\",\n        \"payroll.view\",\n        \"reports.view\",\n        \"reports.export\"\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/roles/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles",
+								"1"
+							]
+						},
+						"description": "تحديث دور موجود"
+					}
+				},
+				{
+					"name": "Delete Role",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/roles/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles",
+								"1"
+							]
+						},
+						"description": "حذف دور"
+					}
+				},
+				{
+					"name": "Get Roles (API)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/roles",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"roles"
+							]
+						},
+						"description": "API endpoint لجلب الأدوار مع الصلاحيات"
+					}
+				},
+				{
+					"name": "Assign Permissions to Role",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"permissions\": [\n        \"users.view\",\n        \"users.create\",\n        \"users.edit\",\n        \"roles.view\"\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/roles/1/assign-permissions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"1",
+								"assign-permissions"
+							]
+						},
+						"description": "إسناد صلاحيات لدور محدد"
+					}
+				}
+			],
+			"description": "Roles management endpoints"
+		},
+		{
+			"name": "Permissions Management",
+			"item": [
+				{
+					"name": "Get All Permissions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/permissions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"permissions"
+							]
+						},
+						"description": "عرض جميع الصلاحيات"
+					}
+				},
+				{
+					"name": "Get Permission by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/permissions/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"permissions",
+								"1"
+							]
+						},
+						"description": "عرض صلاحية محددة بالمعرف"
+					}
+				},
+				{
+					"name": "Create Permission",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"projects.view\",\n    \"display_name\": \"عرض المشاريع\",\n    \"description\": \"صلاحية عرض قائمة المشاريع\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/permissions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"permissions"
+							]
+						},
+						"description": "إنشاء صلاحية جديدة"
+					}
+				},
+				{
+					"name": "Update Permission",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"projects.manage\",\n    \"display_name\": \"إدارة المشاريع\",\n    \"description\": \"صلاحية إدارة شاملة للمشاريع\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/permissions/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"permissions",
+								"1"
+							]
+						},
+						"description": "تحديث صلاحية موجودة"
+					}
+				},
+				{
+					"name": "Delete Permission",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/permissions/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"permissions",
+								"1"
+							]
+						},
+						"description": "حذف صلاحية"
+					}
+				},
+				{
+					"name": "Get Permissions (API)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/permissions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"permissions"
+							]
+						},
+						"description": "API endpoint لجلب الصلاحيات مجمعة حسب النوع"
+					}
+				},
+				{
+					"name": "Bulk Create Permissions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"projects\",\n    \"actions\": [\n        \"view\",\n        \"create\",\n        \"edit\",\n        \"delete\",\n        \"assign\"\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/permissions/bulk-create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"permissions",
+								"bulk-create"
+							]
+						},
+						"description": "إنشاء صلاحيات متعددة بناءً على النوع والأعمال"
+					}
+				}
+			],
+			"description": "Permissions management endpoints"
+		},
+		{
+			"name": "User Management",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user-management",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user-management"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "john",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "Manager",
+									"disabled": true
+								},
+								{
+									"key": "user_type",
+									"value": "employee",
+									"disabled": true
+								}
+							]
+						},
+						"description": "عرض جميع المستخدمين مع فلاتر اختيارية"
+					}
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user-management/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user-management",
+								"1"
+							]
+						},
+						"description": "عرض مستخدم محدد بالمعرف"
+					}
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"أحمد محمد\",\n    \"email\": \"ahmed@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"user_type\": \"employee\",\n    \"tenant_id\": 1,\n    \"roles\": [\"Employee\"],\n    \"permissions\": [\"attendance.view\", \"leaves.create\"]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/user-management",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user-management"
+							]
+						},
+						"description": "إنشاء مستخدم جديد مع أدوار وصلاحيات"
+					}
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"أحمد محمد علي\",\n    \"email\": \"ahmed.ali@example.com\",\n    \"user_type\": \"tenant_admin\",\n    \"tenant_id\": 1,\n    \"roles\": [\"Manager\"],\n    \"permissions\": [\"employees.view\", \"attendance.view\", \"leaves.approve\"]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/user-management/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user-management",
+								"1"
+							]
+						},
+						"description": "تحديث مستخدم موجود"
+					}
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user-management/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user-management",
+								"1"
+							]
+						},
+						"description": "حذف مستخدم"
+					}
+				},
+				{
+					"name": "Assign Role to User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"role\": \"Manager\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/1/assign-role",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1",
+								"assign-role"
+							]
+						},
+						"description": "إسناد دور لمستخدم محدد"
+					}
+				},
+				{
+					"name": "Revoke Role from User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"role\": \"Employee\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/1/revoke-role",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1",
+								"revoke-role"
+							]
+						},
+						"description": "إلغاء دور من مستخدم محدد"
+					}
+				},
+				{
+					"name": "Assign Permission to User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"permission\": \"reports.export\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/1/assign-permission",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1",
+								"assign-permission"
+							]
+						},
+						"description": "إسناد صلاحية مباشرة لمستخدم محدد"
+					}
+				},
+				{
+					"name": "Revoke Permission from User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"permission\": \"reports.export\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/1/revoke-permission",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1",
+								"revoke-permission"
+							]
+						},
+						"description": "إلغاء صلاحية مباشرة من مستخدم محدد"
+					}
+				}
+			],
+			"description": "User management endpoints with roles and permissions"
+		}
+	]
+}

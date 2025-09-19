@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         // Run tenant seeder first
         $this->call([
             TenantSeeder::class,
+            RolePermissionSeeder::class,
             UserSeeder::class,
         ]);
 

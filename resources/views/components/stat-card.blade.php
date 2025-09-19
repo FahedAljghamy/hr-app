@@ -18,7 +18,7 @@
                     <i class="fas fa-arrow-{{ $percentageColor == 'text-success' ? 'up' : 'down' }}"></i>
                     {{ $percentage }}
                 </span>
-                <span class="text-xs text-gray-500 ml-1">{{ __('from last month') }}</span>
+                <span class="text-xs text-gray-500 ml-1">{{ trans('messages.from last month') }}</span>
             </div>
             @endif
         </div>

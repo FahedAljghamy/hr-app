@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Use custom pagination view for SB Admin 2 theme
+        Paginator::defaultView('pagination.custom');
+        Paginator::defaultSimpleView('pagination.custom');
     }
 }

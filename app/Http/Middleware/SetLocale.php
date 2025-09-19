@@ -21,10 +21,26 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $locale = session('locale', config('app.locale'));
+        // Get locale from session first, then cookie, then default
+        $locale = session('locale');
         
+        if (!$locale) {
+            $locale = $request->cookie('locale');
+        }
+        
+        if (!$locale) {
+            $locale = config('app.locale');
+        }
+        
+        // Validate and set locale
         if (in_array($locale, array_keys(config('app.available_locales')))) {
             app()->setLocale($locale);
+            
+            // Also store in session if not already there
+            if (!session('locale')) {
+                session(['locale' => $locale]);
+            }
+            
         }
 
         return $next($request);

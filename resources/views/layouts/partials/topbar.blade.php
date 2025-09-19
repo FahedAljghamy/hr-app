@@ -45,17 +45,44 @@
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-globe fa-fw"></i>
+                <span class="ml-2 d-none d-lg-inline text-gray-600 small">
+                    {{ app()->getLocale() == 'ar' ? 'العربية' : 'English' }}
+                </span>
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="languageDropdown">
-                <a class="dropdown-item" href="{{ route('locale', 'en') }}">
+                <a class="dropdown-item {{ app()->getLocale() == 'en' ? 'active' : '' }}" 
+                   href="{{ route('locale', 'en') }}" 
+                   onclick="changeLanguage('en', this); return false;">
                     <i class="fas fa-flag-usa fa-sm fa-fw mr-2 text-gray-400"></i>
                     English
+                    @if(app()->getLocale() == 'en')
+                        <i class="fas fa-check fa-sm fa-fw ml-2 text-success"></i>
+                    @endif
                 </a>
-                <a class="dropdown-item" href="{{ route('locale', 'ar') }}">
+                <a class="dropdown-item {{ app()->getLocale() == 'ar' ? 'active' : '' }}" 
+                   href="{{ route('locale', 'ar') }}" 
+                   onclick="changeLanguage('ar', this); return false;">
                     <i class="fas fa-flag fa-sm fa-fw mr-2 text-gray-400"></i>
                     العربية
+                    @if(app()->getLocale() == 'ar')
+                        <i class="fas fa-check fa-sm fa-fw ml-2 text-success"></i>
+                    @endif
                 </a>
             </div>
+
+            <script>
+            function changeLanguage(locale, element) {
+                // Show loading state
+                const originalText = element.innerHTML;
+                element.innerHTML = '<i class="fas fa-spinner fa-spin fa-sm fa-fw mr-2"></i> Changing...';
+                
+                // Debug log
+                console.log('Changing language to:', locale);
+                
+                // Simple approach: just redirect to the locale route
+                window.location.href = '/locale/' + locale;
+            }
+            </script>
         </li>
 
         <!-- Nav Item - Alerts -->
