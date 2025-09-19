@@ -1,9 +1,9 @@
 @extends('super-admin.layout')
 
-@section('title', __('Super Admin Dashboard'))
+@section('title', trans('messages.Super Admin Dashboard'))
 
 @section('breadcrumb')
-<li class="breadcrumb-item active">{{ __('Dashboard') }}</li>
+<li class="breadcrumb-item active">{{ trans('messages.Dashboard') }}</li>
 @endsection
 
 @section('content')
@@ -13,7 +13,7 @@
         <div class="info-box">
             <span class="info-box-icon bg-info elevation-1"><i class="fas fa-building"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">{{ __('Total Tenants') }}</span>
+                <span class="info-box-text">{{ trans('messages.Total Tenants') }}</span>
                 <span class="info-box-number">{{ $stats['total_tenants'] }}</span>
             </div>
         </div>
@@ -23,7 +23,7 @@
         <div class="info-box mb-3">
             <span class="info-box-icon bg-success elevation-1"><i class="fas fa-check-circle"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">{{ __('Active Tenants') }}</span>
+                <span class="info-box-text">{{ trans('messages.Active Tenants') }}</span>
                 <span class="info-box-number">{{ $stats['active_tenants'] }}</span>
             </div>
         </div>
@@ -33,7 +33,7 @@
         <div class="info-box mb-3">
             <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">{{ __('Total Users') }}</span>
+                <span class="info-box-text">{{ trans('messages.Total Users') }}</span>
                 <span class="info-box-number">{{ $stats['total_users'] }}</span>
             </div>
         </div>
@@ -43,7 +43,7 @@
         <div class="info-box mb-3">
             <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-dollar-sign"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">{{ __('Monthly Revenue') }}</span>
+                <span class="info-box-text">{{ trans('messages.Monthly Revenue') }}</span>
                 <span class="info-box-number">${{ number_format($stats['subscription_revenue'], 2) }}</span>
             </div>
         </div>
@@ -56,7 +56,7 @@
         <div class="info-box mb-3">
             <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-ban"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">{{ __('Suspended Tenants') }}</span>
+                <span class="info-box-text">{{ trans('messages.Suspended Tenants') }}</span>
                 <span class="info-box-number">{{ $stats['suspended_tenants'] }}</span>
             </div>
         </div>
@@ -66,7 +66,7 @@
         <div class="info-box mb-3">
             <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-user-tie"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">{{ __('Total Employees') }}</span>
+                <span class="info-box-text">{{ trans('messages.Total Employees') }}</span>
                 <span class="info-box-number">{{ $stats['total_employees'] }}</span>
             </div>
         </div>
@@ -76,7 +76,7 @@
         <div class="info-box mb-3">
             <span class="info-box-icon bg-dark elevation-1"><i class="fas fa-user-shield"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">{{ __('Tenant Admins') }}</span>
+                <span class="info-box-text">{{ trans('messages.Tenant Admins') }}</span>
                 <span class="info-box-number">{{ $stats['total_admins'] }}</span>
             </div>
         </div>
@@ -86,7 +86,7 @@
         <div class="info-box mb-3">
             <span class="info-box-icon bg-orange elevation-1"><i class="fas fa-exclamation-triangle"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">{{ __('Expiring Soon') }}</span>
+                <span class="info-box-text">{{ trans('messages.Expiring Soon') }}</span>
                 <span class="info-box-number">{{ $stats['expiring_soon'] }}</span>
             </div>
         </div>
@@ -102,7 +102,7 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-building mr-1"></i>
-                    {{ __('Recent Tenants') }}
+                    {{ trans('messages.Recent Tenants') }}
                 </h3>
             </div>
             <div class="card-body">
@@ -110,10 +110,10 @@
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>{{ __('Company') }}</th>
-                                <th>{{ __('Plan') }}</th>
-                                <th>{{ __('Status') }}</th>
-                                <th>{{ __('Created') }}</th>
+                                <th>{{ trans('messages.Company') }}</th>
+                                <th>{{ trans('messages.Plan') }}</th>
+                                <th>{{ trans('messages.Status') }}</th>
+                                <th>{{ trans('messages.Created') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -137,12 +137,12 @@
                                 <td>
                                     {{ $tenant->created_at->format('M d, Y') }}
                                     <br>
-                                    <small class="text-muted">{{ $tenant->users_count ?? 0 }} {{ __('users') }}</small>
+                                    <small class="text-muted">{{ $tenant->users_count ?? 0 }} {{ trans('messages.users') }}</small>
                                 </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="4" class="text-center">{{ __('No tenants found') }}</td>
+                                <td colspan="4" class="text-center">{{ trans('messages.No tenants found') }}</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -159,7 +159,7 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-chart-pie mr-1"></i>
-                    {{ __('Tenants by Plan') }}
+                    {{ trans('messages.Tenants by Plan') }}
                 </h3>
             </div>
             <div class="card-body">
@@ -169,16 +169,16 @@
                     <div class="col-md-4">
                         <div class="description-block border-right">
                             <span class="description-percentage text-{{ $planType == 'enterprise' ? 'success' : ($planType == 'premium' ? 'warning' : 'info') }}">
-                                {{ $count }} {{ __('tenants') }}
+                                {{ $count }} {{ trans('messages.tenants') }}
                             </span>
                             <h5 class="description-header">{{ ucfirst($planType) }}</h5>
-                            <span class="description-text">{{ __('Plan') }}</span>
+                            <span class="description-text">{{ trans('messages.Plan') }}</span>
                         </div>
                     </div>
                     @endforeach
                 </div>
                 @else
-                <p class="text-center">{{ __('No data available') }}</p>
+                <p class="text-center">{{ trans('messages.No data available') }}</p>
                 @endif
             </div>
         </div>
@@ -188,7 +188,7 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-exclamation-triangle mr-1"></i>
-                    {{ __('Expiring Soon') }}
+                    {{ trans('messages.Expiring Soon') }}
                 </h3>
             </div>
             <div class="card-body">
@@ -197,8 +197,8 @@
                         <table class="table table-sm">
                             <thead>
                                 <tr>
-                                    <th>{{ __('Company') }}</th>
-                                    <th>{{ __('Days Left') }}</th>
+                                    <th>{{ trans('messages.Company') }}</th>
+                                    <th>{{ trans('messages.Days Left') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -214,7 +214,7 @@
                                             $daysLeft = $tenant->subscription_end_date->diffInDays(now());
                                         @endphp
                                         <span class="badge badge-{{ $daysLeft <= 7 ? 'danger' : ($daysLeft <= 30 ? 'warning' : 'success') }}">
-                                            {{ $daysLeft }} {{ __('days') }}
+                                            {{ $daysLeft }} {{ trans('messages.days') }}
                                         </span>
                                     </td>
                                 </tr>
@@ -223,7 +223,7 @@
                         </table>
                     </div>
                 @else
-                    <p class="text-center text-muted">{{ __('No expiring subscriptions') }}</p>
+                    <p class="text-center text-muted">{{ trans('messages.No expiring subscriptions') }}</p>
                 @endif
             </div>
         </div>
@@ -233,24 +233,24 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-bolt mr-1"></i>
-                    {{ __('Quick Actions') }}
+                    {{ trans('messages.Quick Actions') }}
                 </h3>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <a href="{{ route('super-admin.tenants.create') }}" class="btn btn-primary btn-block mb-2">
-                            <i class="fas fa-plus mr-2"></i>{{ __('Add New Tenant') }}
+                            <i class="fas fa-plus mr-2"></i>{{ trans('messages.Add New Tenant') }}
                         </a>
                     </div>
                     <div class="col-12">
                         <a href="{{ route('super-admin.tenants.index') }}" class="btn btn-info btn-block mb-2">
-                            <i class="fas fa-list mr-2"></i>{{ __('View All Tenants') }}
+                            <i class="fas fa-list mr-2"></i>{{ trans('messages.View All Tenants') }}
                         </a>
                     </div>
                     <div class="col-12">
                         <a href="#" class="btn btn-success btn-block">
-                            <i class="fas fa-download mr-2"></i>{{ __('Export Reports') }}
+                            <i class="fas fa-download mr-2"></i>{{ trans('messages.Export Reports') }}
                         </a>
                     </div>
                 </div>

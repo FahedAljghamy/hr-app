@@ -55,6 +55,39 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
+    <!-- Nav Item - User Management -->
+    @canany(['users.view', 'roles.view', 'permissions.view', 'dashboard.view'])
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUserManagement" aria-expanded="true" aria-controls="collapseUserManagement">
+            <i class="fas fa-fw fa-users-cog"></i>
+            <span>{{ trans('messages.User Management') }}</span>
+        </a>
+        <div id="collapseUserManagement" class="collapse" aria-labelledby="headingUserManagement" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">{{ trans('messages.Management Options') }}:</h6>
+                @can('dashboard.view')
+                <a class="collapse-item" href="{{ route('tenant-dashboard.index') }}">{{ trans('messages.Dashboard') }}</a>
+                @endcan
+                @can('users.view')
+                <a class="collapse-item" href="{{ route('user-management.index') }}">{{ trans('messages.Users') }}</a>
+                @endcan
+                @can('roles.view')
+                <a class="collapse-item" href="{{ route('roles.index') }}">{{ trans('messages.Roles') }}</a>
+                @endcan
+                @can('permissions.view')
+                <a class="collapse-item" href="{{ route('permissions.index') }}">{{ trans('messages.Permissions') }}</a>
+                @endcan
+                @can('roles.view')
+                <a class="collapse-item" href="{{ route('roles.permissions-map') }}">{{ trans('messages.Roles & Permissions Map') }}</a>
+                @endcan
+            </div>
+        </div>
+    </li>
+    @endcanany
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
     <!-- Heading -->
     <div class="sidebar-heading">
         {{ __('Reports') }}

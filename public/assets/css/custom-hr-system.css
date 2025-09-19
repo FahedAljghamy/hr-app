@@ -1,0 +1,426 @@
+/**
+ * Author: Eng.Fahed
+ * Custom CSS for HR System - SB Admin 2 Enhancements
+ * تحسينات CSS مخصصة لنظام الموارد البشرية
+ */
+
+/* Language Switcher Styles */
+.dropdown-item.active {
+    background-color: rgba(78, 115, 223, 0.1);
+    color: #5a5c69;
+    font-weight: 600;
+}
+
+.dropdown-item.active:hover {
+    background-color: rgba(78, 115, 223, 0.2);
+}
+
+/* RTL Support for Sidebar */
+[dir="rtl"] #accordionSidebar {
+    text-align: right;
+}
+
+[dir="rtl"] .sidebar .nav-item .nav-link {
+    text-align: right;
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .sidebar .nav-item .nav-link i {
+    margin-left: 0.5rem;
+    margin-right: 0;
+    order: 2;
+}
+
+[dir="rtl"] .sidebar .nav-item .nav-link span {
+    order: 1;
+}
+
+[dir="rtl"] .collapse-inner .collapse-item {
+    text-align: right;
+    padding-right: 1.5rem;
+    padding-left: 0.5rem;
+    direction: rtl;
+}
+
+[dir="rtl"] .collapse-header {
+    text-align: right;
+    padding-right: 1.5rem;
+    direction: rtl;
+}
+
+/* Fix icon positioning in RTL */
+[dir="rtl"] .sidebar .nav-item .nav-link[data-toggle="collapse"]::after {
+    float: left;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+[dir="rtl"] .sidebar .sidebar-brand {
+    justify-content: flex-end;
+}
+
+[dir="rtl"] .sidebar .sidebar-brand .sidebar-brand-text {
+    margin-left: 0;
+    margin-right: 0.25rem;
+}
+
+/* RTL Support for Content Area */
+[dir="rtl"] .topbar .navbar-nav .nav-item .nav-link {
+    text-align: right;
+}
+
+[dir="rtl"] .topbar .navbar-nav .nav-item .nav-link span {
+    margin-left: 0;
+    margin-right: 0.5rem;
+}
+
+[dir="rtl"] .card-header h6 i {
+    margin-left: 0.5rem;
+    margin-right: 0;
+}
+
+[dir="rtl"] .btn i {
+    margin-left: 0.5rem;
+    margin-right: 0;
+}
+
+[dir="rtl"] .btn i.fa-sm {
+    margin-left: 0.25rem;
+    margin-right: 0;
+}
+
+/* RTL Support for Tables */
+[dir="rtl"] .table th,
+[dir="rtl"] .table td {
+    text-align: right;
+}
+
+[dir="rtl"] .table th:last-child,
+[dir="rtl"] .table td:last-child {
+    text-align: center; /* Keep actions centered */
+}
+
+/* RTL Support for Forms */
+[dir="rtl"] .form-label {
+    text-align: right;
+}
+
+[dir="rtl"] .form-control {
+    text-align: right;
+}
+
+/* RTL Support for Page Content */
+[dir="rtl"] .page-heading h1 {
+    text-align: right;
+}
+
+[dir="rtl"] .d-sm-flex {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .card-header h6 {
+    text-align: right;
+}
+
+[dir="rtl"] .text-muted {
+    text-align: right;
+}
+
+/* RTL Support for Buttons */
+[dir="rtl"] .btn-group {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .btn .fas {
+    margin-left: 0.5rem;
+    margin-right: 0;
+}
+
+/* RTL Support for Alerts */
+[dir="rtl"] .alert {
+    text-align: right;
+}
+
+/* RTL Support for Dropdowns */
+[dir="rtl"] .dropdown-menu {
+    text-align: right;
+}
+
+[dir="rtl"] .dropdown-item {
+    text-align: right;
+}
+
+/* RTL Support for Pagination */
+[dir="rtl"] .pagination {
+    flex-direction: row-reverse;
+}
+
+/* RTL Support for Statistics Cards */
+[dir="rtl"] .card-body .row.no-gutters {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .text-xs {
+    text-align: right;
+}
+
+/* Global Icon Circle */
+.icon-circle {
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-circle-lg {
+    height: 3.5rem;
+    width: 3.5rem;
+}
+
+.icon-circle-sm {
+    height: 2rem;
+    width: 2rem;
+}
+
+/* Pagination Styling */
+.pagination {
+    margin-bottom: 0;
+}
+
+.page-link {
+    color: #5a5c69;
+    border: 1px solid #dddfeb;
+    padding: 0.5rem 0.75rem;
+}
+
+.page-link:hover {
+    color: #224abe;
+    background-color: #eaecf4;
+    border-color: #dddfeb;
+}
+
+.page-item.active .page-link {
+    background-color: #5a5c69;
+    border-color: #5a5c69;
+    color: white;
+}
+
+.page-item.disabled .page-link {
+    color: #858796;
+    background-color: white;
+    border-color: #dddfeb;
+}
+
+/* Card Footer Styling */
+.card-footer {
+    background-color: #f8f9fc;
+    border-top: 1px solid #e3e6f0;
+    padding: 1rem 1.25rem;
+}
+
+/* Badge Enhancements */
+.badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.badge-sm {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.badge-pill {
+    border-radius: 10rem;
+}
+
+/* Button Groups */
+.btn-group .btn {
+    margin-right: 2px;
+}
+
+.btn-group .btn:last-child {
+    margin-right: 0;
+}
+
+/* Form Enhancements */
+.form-control:focus {
+    border-color: #bac8f3;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.form-check-input:checked {
+    background-color: #5a5c69;
+    border-color: #5a5c69;
+}
+
+.form-check-input:focus {
+    border-color: #bac8f3;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+/* Alert Enhancements */
+.alert {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.alert-success {
+    background-color: #d1edff;
+    color: #0c5460;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Table Enhancements */
+.table th {
+    border-top: none;
+    font-weight: 800;
+    font-size: 0.75rem;
+    color: #5a5c69;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0,0,0,.075);
+}
+
+/* Card Hover Effects */
+.card:hover {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+    transition: all 0.3s;
+}
+
+/* Border Left Colors */
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc !important;
+}
+
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+
+.border-left-danger {
+    border-left: 0.25rem solid #e74a3b !important;
+}
+
+/* Progress Bar Enhancements */
+.progress-sm {
+    height: 0.5rem;
+}
+
+.progress-xs {
+    height: 0.25rem;
+}
+
+/* Modal Enhancements */
+.modal-header {
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.modal-footer {
+    border-top: 1px solid #e3e6f0;
+}
+
+/* Dropdown Enhancements */
+.dropdown-menu {
+    border: 1px solid #e3e6f0;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fc;
+}
+
+/* RTL Support for Arabic */
+@media (max-width: 768px) {
+    .d-sm-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .d-sm-flex .btn {
+        margin-top: 1rem;
+        width: 100%;
+    }
+}
+
+/* Arabic RTL Specific */
+html[dir="rtl"] .table td, 
+html[dir="rtl"] .table th {
+    text-align: right;
+}
+
+html[dir="rtl"] .btn-group .btn {
+    margin-left: 2px;
+    margin-right: 0;
+}
+
+html[dir="rtl"] .dropdown-menu-right {
+    right: 0;
+    left: auto;
+}
+
+html[dir="rtl"] .modal-header .close {
+    margin: -1rem auto -1rem -1rem;
+}
+
+html[dir="rtl"] .form-check-input {
+    margin-right: -1.25rem;
+    margin-left: 0;
+}
+
+html[dir="rtl"] .form-check-label {
+    padding-right: 1.25rem;
+    padding-left: 0;
+}
+
+/* Loading States */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #4e73df;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

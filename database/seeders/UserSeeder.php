@@ -12,6 +12,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Tenant;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -21,7 +22,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Create Super Admin
-        User::create([
+        $superAdmin = User::create([
             'name' => 'Super Administrator',
             'email' => 'superadmin@hrsystem.com',
             'password' => Hash::make('password123'),
@@ -30,14 +31,17 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
-        $this->command->info('✅ Created Super Admin user');
+        // Assign Admin role to Super Admin
+        $superAdmin->assignRole('Admin');
+
+        $this->command->info('✅ Created Super Admin user with Admin role');
 
         // Get all tenants and create admin users for each
         $tenants = Tenant::all();
         
         foreach ($tenants as $tenant) {
             // Create Tenant Admin
-            User::create([
+            $tenantAdmin = User::create([
                 'name' => $tenant->company_name . ' Admin',
                 'email' => $tenant->contact_email,
                 'password' => Hash::make('admin123'),
@@ -45,6 +49,9 @@ class UserSeeder extends Seeder
                 'user_type' => 'tenant_admin',
                 'email_verified_at' => now(),
             ]);
+
+            // Assign Manager role to Tenant Admin (or Admin if they need full access)
+            $tenantAdmin->assignRole('Admin'); // Give full access to tenant admins
 
             // Create sample employees for each tenant
             $employeeCount = rand(5, min(20, $tenant->max_employees));
@@ -64,7 +71,7 @@ class UserSeeder extends Seeder
                 }
                 $usedEmails[] = $email;
 
-                User::create([
+                $employee = User::create([
                     'name' => $firstName . ' ' . $lastName,
                     'email' => $email,
                     'password' => Hash::make('employee123'),
@@ -72,6 +79,9 @@ class UserSeeder extends Seeder
                     'user_type' => 'employee',
                     'email_verified_at' => now(),
                 ]);
+
+                // Assign Employee role to employees
+                $employee->assignRole('Employee');
             }
 
             $this->command->info("✅ Created admin + {$employeeCount} employees for {$tenant->company_name}");

@@ -14,13 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Language switching routes
-Route::get('/locale/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'ar'])) {
-        app()->setLocale($locale);
-        session()->put('locale', $locale);
-    }
-    return redirect()->back();
-})->name('locale');
+Route::get('/locale/{locale}', [App\Http\Controllers\LanguageController::class, 'switch'])->name('locale');
+Route::get('/locale', [App\Http\Controllers\LanguageController::class, 'current'])->name('locale.current');
+
 
 // Authentication Routes (Simple for testing)
 Route::get('/login', function () {
@@ -65,6 +61,48 @@ Route::prefix('super-admin')->name('super-admin.')->middleware(['auth', 'superad
 // Tenant Routes (Protected by auth and tenant middleware)
 Route::middleware(['auth', 'tenant'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    
+    // Tenant Dashboard Routes
+    Route::prefix('tenant-dashboard')->name('tenant-dashboard.')->group(function () {
+        Route::get('/', [App\Http\Controllers\TenantDashboardController::class, 'index'])->name('index');
+        Route::get('/detailed-report', [App\Http\Controllers\TenantDashboardController::class, 'detailedReport'])->name('detailed-report');
+        Route::get('/export-report', [App\Http\Controllers\TenantDashboardController::class, 'exportReport'])->name('export-report');
+        
+        // API Routes for Dashboard
+        Route::prefix('api')->name('api.')->group(function () {
+            Route::get('users-stats', [App\Http\Controllers\TenantDashboardController::class, 'getUsersStats'])->name('users-stats');
+            Route::get('roles-stats', [App\Http\Controllers\TenantDashboardController::class, 'getRolesStats'])->name('roles-stats');
+            Route::get('user-activity', [App\Http\Controllers\TenantDashboardController::class, 'getUserActivity'])->name('user-activity');
+        });
+    });
+    
+    // Roles & Permissions Management Routes
+    Route::resource('roles', App\Http\Controllers\RoleController::class);
+    Route::resource('permissions', App\Http\Controllers\PermissionController::class);
+    Route::resource('user-management', App\Http\Controllers\UserManagementController::class)->parameters([
+        'user-management' => 'user'
+    ]);
+    
+    // Roles Permissions Map
+    Route::get('roles-permissions-map', function() {
+        return view('roles.permissions-map');
+    })->name('roles.permissions-map');
+    
+    // Additional API Routes for Roles & Permissions
+    Route::prefix('api')->name('api.')->group(function () {
+        Route::get('roles', [App\Http\Controllers\RoleController::class, 'apiIndex'])->name('roles.index');
+        Route::post('roles/{role}/assign-permissions', [App\Http\Controllers\RoleController::class, 'assignPermissions'])->name('roles.assign-permissions');
+        Route::get('permissions', [App\Http\Controllers\PermissionController::class, 'apiIndex'])->name('permissions.index');
+        
+        // User Role & Permission Management
+        Route::post('users/{user}/assign-role', [App\Http\Controllers\UserManagementController::class, 'assignRole'])->name('users.assign-role');
+        Route::post('users/{user}/revoke-role', [App\Http\Controllers\UserManagementController::class, 'revokeRole'])->name('users.revoke-role');
+        Route::post('users/{user}/assign-permission', [App\Http\Controllers\UserManagementController::class, 'assignPermission'])->name('users.assign-permission');
+        Route::post('users/{user}/revoke-permission', [App\Http\Controllers\UserManagementController::class, 'revokePermission'])->name('users.revoke-permission');
+    });
+    
+    // Bulk Permission Creation
+    Route::post('permissions/bulk-create', [App\Http\Controllers\PermissionController::class, 'bulkCreate'])->name('permissions.bulk-create');
 });
 
 // Default route for testing (without auth for now)
