@@ -106,6 +106,18 @@ Route::middleware(['auth', 'tenant'])->group(function () {
         Route::resource('employees', App\Http\Controllers\EmployeeController::class);
         Route::resource('payrolls', App\Http\Controllers\PayrollController::class);
         Route::patch('payrolls/{payroll}/mark-as-paid', [App\Http\Controllers\PayrollController::class, 'markAsPaid'])->name('payrolls.mark-as-paid');
+
+        // Leave Management Routes
+        Route::resource('leaves', App\Http\Controllers\LeaveController::class)->parameters(['leaves' => 'leave']);
+        Route::patch('leaves/{leave}/approve', [App\Http\Controllers\LeaveController::class, 'approve'])->name('leaves.approve');
+        Route::patch('leaves/{leave}/reject', [App\Http\Controllers\LeaveController::class, 'reject'])->name('leaves.reject');
+        Route::patch('leaves/{leave}/cancel', [App\Http\Controllers\LeaveController::class, 'cancel'])->name('leaves.cancel');
+        
+        // Leave Comments Routes
+        Route::post('leaves/{leave}/comments', [App\Http\Controllers\LeaveCommentController::class, 'store'])->name('leave-comments.store');
+        Route::get('leaves/{leave}/comments', [App\Http\Controllers\LeaveCommentController::class, 'getComments'])->name('leave-comments.get');
+        Route::put('leave-comments/{comment}', [App\Http\Controllers\LeaveCommentController::class, 'update'])->name('leave-comments.update');
+        Route::delete('leave-comments/{comment}', [App\Http\Controllers\LeaveCommentController::class, 'destroy'])->name('leave-comments.destroy');
         
         // Employee Dashboard Routes (for employees to view their own data)
         Route::prefix('employee-dashboard')->name('employee-dashboard.')->group(function () {

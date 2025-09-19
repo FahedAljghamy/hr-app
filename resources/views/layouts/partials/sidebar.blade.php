@@ -110,6 +110,12 @@
                     @can('payrolls.create')
                     <a class="collapse-item" href="{{ route('payrolls.create') }}">{{ trans('messages.Create Payroll') }}</a>
                     @endcan
+                    @can('leaves.view')
+                    <a class="collapse-item" href="{{ route('leaves.index') }}">{{ trans('messages.Leave Management') }}</a>
+                    @endcan
+                    @can('leaves.create')
+                    <a class="collapse-item" href="{{ route('leaves.create') }}">{{ trans('messages.Request Leave') }}</a>
+                    @endcan
                 </div>
             </div>
         </li>
@@ -205,6 +211,22 @@
             <a class="nav-link" href="{{ route('employee-dashboard.documents') }}">
                 <i class="fas fa-fw fa-file-alt"></i>
                 <span>{{ trans('messages.My Documents') }}</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - My Leaves -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('leaves.index') }}">
+                <i class="fas fa-fw fa-calendar-plus"></i>
+                <span>{{ trans('messages.My Leaves') }}</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Request Leave -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('leaves.create') }}">
+                <i class="fas fa-fw fa-plus-circle"></i>
+                <span>{{ trans('messages.Request Leave') }}</span>
             </a>
         </li>
         @endif
