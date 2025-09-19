@@ -29,6 +29,30 @@ class Kernel extends ConsoleKernel
                  ->dailyAt('08:00')
                  ->timezone('Asia/Dubai')
                  ->description('Urgent check for documents expiring in 3 days');
+
+        // فحص مستندات الموظفين يومياً في الساعة 8:30 صباحاً
+        $schedule->command('employees:check-documents --days=30')
+                 ->dailyAt('08:30')
+                 ->timezone('Asia/Dubai')
+                 ->description('Check for employee documents expiring in 30 days');
+
+        // فحص عاجل لمستندات الموظفين يومياً في الساعة 7:30 صباحاً
+        $schedule->command('employees:check-documents --days=7')
+                 ->dailyAt('07:30')
+                 ->timezone('Asia/Dubai')
+                 ->description('Urgent check for employee documents expiring in 7 days');
+
+        // فحص عقود الموظفين أسبوعياً يوم الثلاثاء الساعة 9 صباحاً
+        $schedule->command('employees:check-documents --days=30 --type=contract')
+                 ->weeklyOn(2, '09:00')
+                 ->timezone('Asia/Dubai')
+                 ->description('Check for employee contracts expiring in 30 days');
+
+        // فحص فيز الموظفين أسبوعياً يوم الأربعاء الساعة 9 صباحاً
+        $schedule->command('employees:check-documents --days=30 --type=visa')
+                 ->weeklyOn(3, '09:00')
+                 ->timezone('Asia/Dubai')
+                 ->description('Check for employee visas expiring in 30 days');
     }
 
     /**

@@ -101,6 +101,20 @@ Route::middleware(['auth', 'tenant'])->group(function () {
         // Legal Documents additional routes
         Route::patch('legal-documents/{legalDocument}/status', [App\Http\Controllers\LegalDocumentController::class, 'updateStatus'])->name('legal-documents.update-status');
         Route::get('legal-documents/{legalDocument}/download', [App\Http\Controllers\LegalDocumentController::class, 'download'])->name('legal-documents.download');
+
+        // Employee Management Routes
+        Route::resource('employees', App\Http\Controllers\EmployeeController::class);
+        Route::resource('payrolls', App\Http\Controllers\PayrollController::class);
+        Route::patch('payrolls/{payroll}/mark-as-paid', [App\Http\Controllers\PayrollController::class, 'markAsPaid'])->name('payrolls.mark-as-paid');
+        
+        // Employee Dashboard Routes (for employees to view their own data)
+        Route::prefix('employee-dashboard')->name('employee-dashboard.')->group(function () {
+            Route::get('/', [App\Http\Controllers\EmployeeDashboardController::class, 'index'])->name('index');
+            Route::get('/profile', [App\Http\Controllers\EmployeeDashboardController::class, 'profile'])->name('profile');
+            Route::get('/payrolls', [App\Http\Controllers\EmployeeDashboardController::class, 'payrolls'])->name('payrolls');
+            Route::get('/payrolls/{payroll}', [App\Http\Controllers\EmployeeDashboardController::class, 'payrollDetails'])->name('payroll-details');
+            Route::get('/documents', [App\Http\Controllers\EmployeeDashboardController::class, 'documents'])->name('documents');
+        });
         
         // API route for manual expiry check
         Route::post('api/legal-documents/check-expiry', function() {
