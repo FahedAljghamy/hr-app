@@ -54,6 +54,12 @@ Route::prefix('super-admin')->name('super-admin.')->middleware(['auth', 'superad
     
     // Tenant Management Routes
     Route::resource('tenants', App\Http\Controllers\SuperAdmin\TenantController::class);
+    
+    // Additional Tenant Routes
+    Route::patch('tenants/{tenant}/activate', [App\Http\Controllers\SuperAdmin\TenantController::class, 'activate'])->name('tenants.activate');
+    Route::patch('tenants/{tenant}/suspend', [App\Http\Controllers\SuperAdmin\TenantController::class, 'suspend'])->name('tenants.suspend');
+    Route::post('tenants/{tenant}/extend-subscription', [App\Http\Controllers\SuperAdmin\TenantController::class, 'extendSubscription'])->name('tenants.extend-subscription');
+    Route::get('tenants/{tenant}/statistics', [App\Http\Controllers\SuperAdmin\TenantController::class, 'statistics'])->name('tenants.statistics');
 });
 
 // Tenant Routes (Protected by auth and tenant middleware)

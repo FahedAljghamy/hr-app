@@ -165,6 +165,76 @@ class TenantController extends Controller
     }
 
     /**
+     * Activate tenant
+     *
+     * @param  \App\Models\Tenant  $tenant
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function activate(Tenant $tenant)
+    {
+        $tenant->update(['status' => 'active']);
+
+        return redirect()->back()
+            ->with('success', __('Tenant activated successfully.'));
+    }
+
+    /**
+     * Suspend tenant
+     *
+     * @param  \App\Models\Tenant  $tenant
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function suspend(Tenant $tenant)
+    {
+        $tenant->update(['status' => 'suspended']);
+
+        return redirect()->back()
+            ->with('success', __('Tenant suspended successfully.'));
+    }
+
+    /**
+     * Extend subscription
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Tenant  $tenant
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function extendSubscription(Request $request, Tenant $tenant)
+    {
+        $validated = $request->validate([
+            'extension_days' => 'required|integer|min:1|max:3650'
+        ]);
+
+        $currentEndDate = $tenant->subscription_end_date;
+        $newEndDate = $currentEndDate->addDays($validated['extension_days']);
+        
+        $tenant->update(['subscription_end_date' => $newEndDate]);
+
+        return redirect()->back()
+            ->with('success', __('Subscription extended successfully.'));
+    }
+
+    /**
+     * Get tenant statistics
+     *
+     * @param  \App\Models\Tenant  $tenant
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function statistics(Tenant $tenant)
+    {
+        $stats = [
+            'total_users' => $tenant->users()->count(),
+            'active_users' => $tenant->users()->where('updated_at', '>=', now()->subDays(30))->count(),
+            'admin_users' => $tenant->users()->where('user_type', 'tenant_admin')->count(),
+            'employee_users' => $tenant->users()->where('user_type', 'employee')->count(),
+            'days_remaining' => max(0, $tenant->subscription_end_date->diffInDays(now())),
+            'subscription_status' => $tenant->isSubscriptionValid() ? 'valid' : 'expired',
+        ];
+
+        return response()->json($stats);
+    }
+
+    /**
      * Get features by subscription plan
      *
      * @param  string  $plan
