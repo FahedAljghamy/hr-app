@@ -214,6 +214,14 @@
             </a>
         </li>
 
+        <!-- Nav Item - Leave Balance -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('employee-dashboard.leave-balance') }}">
+                <i class="fas fa-fw fa-calendar-check"></i>
+                <span>{{ trans('messages.Leave Balance') }}</span>
+            </a>
+        </li>
+
         <!-- Nav Item - My Leaves -->
         <li class="nav-item">
             <a class="nav-link" href="{{ route('leaves.index') }}">
@@ -227,6 +235,39 @@
             <a class="nav-link" href="{{ route('leaves.create') }}">
                 <i class="fas fa-fw fa-plus-circle"></i>
                 <span>{{ trans('messages.Request Leave') }}</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Certificates -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('employee-dashboard.certificates.index') }}">
+                <i class="fas fa-fw fa-certificate"></i>
+                <span>{{ trans('messages.My Certificates') }}</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Request Certificate -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('employee-dashboard.certificates.create') }}">
+                <i class="fas fa-fw fa-file-medical"></i>
+                <span>{{ trans('messages.Request Certificate') }}</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Notifications -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('employee-dashboard.notifications') }}">
+                <i class="fas fa-fw fa-bell"></i>
+                <span>{{ trans('messages.My Notifications') }}</span>
+                @if(auth()->user()->user_type === 'employee')
+                    @php
+                        $employee = App\Models\Employee::where('user_id', auth()->id())->first();
+                        $unreadCount = $employee ? $employee->getUnreadNotificationsCount() : 0;
+                    @endphp
+                    @if($unreadCount > 0)
+                        <span class="badge badge-danger badge-counter">{{ $unreadCount > 99 ? '99+' : $unreadCount }}</span>
+                    @endif
+                @endif
             </a>
         </li>
         @endif

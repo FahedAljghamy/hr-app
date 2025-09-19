@@ -126,6 +126,26 @@ Route::middleware(['auth', 'tenant'])->group(function () {
             Route::get('/payrolls', [App\Http\Controllers\EmployeeDashboardController::class, 'payrolls'])->name('payrolls');
             Route::get('/payrolls/{payroll}', [App\Http\Controllers\EmployeeDashboardController::class, 'payrollDetails'])->name('payroll-details');
             Route::get('/documents', [App\Http\Controllers\EmployeeDashboardController::class, 'documents'])->name('documents');
+            
+            // الإشعارات
+            Route::get('/notifications', [App\Http\Controllers\EmployeeDashboardController::class, 'notifications'])->name('notifications');
+            Route::post('/notifications/{notification}/mark-read', [App\Http\Controllers\EmployeeDashboardController::class, 'markNotificationAsRead'])->name('notifications.mark-read');
+            Route::post('/notifications/mark-all-read', [App\Http\Controllers\EmployeeDashboardController::class, 'markAllNotificationsAsRead'])->name('notifications.mark-all-read');
+            Route::get('/notifications/count', [App\Http\Controllers\EmployeeDashboardController::class, 'getUnreadNotificationsCount'])->name('notifications.count');
+            
+            // رصيد الإجازات
+            Route::get('/leave-balance', [App\Http\Controllers\EmployeeDashboardController::class, 'leaveBalance'])->name('leave-balance');
+            
+            // الشهادات
+            Route::prefix('certificates')->name('certificates.')->group(function () {
+                Route::get('/', [App\Http\Controllers\EmployeeCertificateController::class, 'index'])->name('index');
+                Route::get('/create', [App\Http\Controllers\EmployeeCertificateController::class, 'create'])->name('create');
+                Route::post('/', [App\Http\Controllers\EmployeeCertificateController::class, 'store'])->name('store');
+                Route::get('/{certificate}', [App\Http\Controllers\EmployeeCertificateController::class, 'show'])->name('show');
+                Route::get('/{certificate}/download', [App\Http\Controllers\EmployeeCertificateController::class, 'download'])->name('download');
+                Route::patch('/{certificate}/cancel', [App\Http\Controllers\EmployeeCertificateController::class, 'cancel'])->name('cancel');
+                Route::get('/api/stats', [App\Http\Controllers\EmployeeCertificateController::class, 'getStats'])->name('stats');
+            });
         });
         
         // API route for manual expiry check

@@ -258,4 +258,118 @@ class EmployeeDashboardController extends Controller
 
         return view('employee-dashboard.documents', compact('employee', 'documents'));
     }
+
+    /**
+     * عرض الإشعارات
+     */
+    public function notifications(): View
+    {
+        $user = auth()->user();
+        $employee = Employee::where('user_id', $user->id)
+                           ->where('tenant_id', $user->tenant_id)
+                           ->first();
+
+        if (!$employee) {
+            return view('employee-dashboard.no-employee');
+        }
+
+        $notifications = $employee->notifications()
+                                 ->notExpired()
+                                 ->orderBy('created_at', 'desc')
+                                 ->paginate(20);
+
+        // إحصائيات الإشعارات
+        $stats = [
+            'total' => $employee->notifications()->count(),
+            'unread' => $employee->notifications()->unread()->count(),
+            'urgent' => $employee->notifications()->where('priority', 'urgent')->unread()->count(),
+            'requires_action' => $employee->notifications()->requiresAction()->unread()->count(),
+        ];
+
+        return view('employee-dashboard.notifications', compact('employee', 'notifications', 'stats'));
+    }
+
+    /**
+     * تحديد إشعار كمقروء
+     */
+    public function markNotificationAsRead($notificationId): JsonResponse
+    {
+        $user = auth()->user();
+        $employee = Employee::where('user_id', $user->id)->first();
+
+        if (!$employee) {
+            return response()->json(['success' => false, 'message' => 'Employee not found'], 404);
+        }
+
+        $notification = $employee->notifications()->find($notificationId);
+        
+        if (!$notification) {
+            return response()->json(['success' => false, 'message' => 'Notification not found'], 404);
+        }
+
+        $notification->markAsRead();
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * تحديد جميع الإشعارات كمقروءة
+     */
+    public function markAllNotificationsAsRead(): JsonResponse
+    {
+        $user = auth()->user();
+        $employee = Employee::where('user_id', $user->id)->first();
+
+        if (!$employee) {
+            return response()->json(['success' => false, 'message' => 'Employee not found'], 404);
+        }
+
+        EmployeeNotification::markAllAsReadForEmployee($employee->id);
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * الحصول على عدد الإشعارات غير المقروءة
+     */
+    public function getUnreadNotificationsCount(): JsonResponse
+    {
+        $user = auth()->user();
+        $employee = Employee::where('user_id', $user->id)->first();
+
+        if (!$employee) {
+            return response()->json(['count' => 0]);
+        }
+
+        $count = $employee->getUnreadNotificationsCount();
+
+        return response()->json(['count' => $count]);
+    }
+
+    /**
+     * عرض رصيد الإجازات
+     */
+    public function leaveBalance(): View
+    {
+        $user = auth()->user();
+        $employee = Employee::where('user_id', $user->id)
+                           ->where('tenant_id', $user->tenant_id)
+                           ->first();
+
+        if (!$employee) {
+            return view('employee-dashboard.no-employee');
+        }
+
+        $leaveBalances = $employee->getAllLeaveBalances();
+        
+        // تاريخ الإجازات هذا العام
+        $currentYear = date('Y');
+        $leaveHistory = $employee->leaves()
+                               ->whereYear('start_date', $currentYear)
+                               ->orderBy('start_date', 'desc')
+                               ->get()
+                               ->groupBy('leave_type');
+
+        return view('employee-dashboard.leave-balance', compact('employee', 'leaveBalances', 'leaveHistory'));
+    }
 }

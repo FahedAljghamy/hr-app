@@ -53,6 +53,14 @@ class User extends Authenticatable
     ];
 
     /**
+     * علاقة المستخدم بالموظف
+     */
+    public function employee()
+    {
+        return $this->hasOne(Employee::class);
+    }
+
+    /**
      * Get the tenant that owns the user
      */
     public function tenant(): BelongsTo

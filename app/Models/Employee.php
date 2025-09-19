@@ -144,6 +144,16 @@ class Employee extends Model
         return $this->hasMany(Payroll::class);
     }
 
+    public function certificates(): HasMany
+    {
+        return $this->hasMany(EmployeeCertificate::class);
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(EmployeeNotification::class);
+    }
+
     /**
      * نطاقات الاستعلام
      */
@@ -297,9 +307,9 @@ class Employee extends Model
         
         // البحث عن آخر معرف للموظف عالمياً (ليس فقط للـ tenant)
         $lastEmployee = self::withoutGlobalScope('tenant')
-                           ->where('employee_id', 'LIKE', $prefix . $year . '%')
-                           ->orderBy('employee_id', 'desc')
-                           ->first();
+                             ->where('employee_id', 'LIKE', $prefix . $year . '%')
+                             ->orderBy('employee_id', 'desc')
+                             ->first();
 
         if ($lastEmployee) {
             $lastNumber = (int) substr($lastEmployee->employee_id, -4);
@@ -309,6 +319,127 @@ class Employee extends Model
         }
 
         return $prefix . $year . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * حساب رصيد الإجازات
+     */
+    public function getAnnualLeaveBalance(): array
+    {
+        $currentYear = date('Y');
+        
+        // الإجازة السنوية المستحقة (30 يوم سنوياً في الإمارات)
+        $annualEntitlement = 30;
+        
+        // حساب الإجازات المستخدمة هذا العام
+        $usedAnnual = $this->leaves()
+                          ->where('leave_type', 'annual')
+                          ->where('status', 'approved')
+                          ->whereYear('start_date', $currentYear)
+                          ->sum('total_days');
+        
+        $remainingAnnual = max(0, $annualEntitlement - $usedAnnual);
+        
+        return [
+            'entitled' => $annualEntitlement,
+            'used' => $usedAnnual,
+            'remaining' => $remainingAnnual,
+            'year' => $currentYear
+        ];
+    }
+
+    public function getSickLeaveBalance(): array
+    {
+        $currentYear = date('Y');
+        
+        // الإجازة المرضية المستحقة (90 يوم في 3 سنوات في الإمارات)
+        $sickEntitlement = 30; // 30 يوم سنوياً كحد أقصى
+        
+        // حساب الإجازات المرضية المستخدمة هذا العام
+        $usedSick = $this->leaves()
+                        ->where('leave_type', 'sick')
+                        ->where('status', 'approved')
+                        ->whereYear('start_date', $currentYear)
+                        ->sum('total_days');
+        
+        $remainingSick = max(0, $sickEntitlement - $usedSick);
+        
+        return [
+            'entitled' => $sickEntitlement,
+            'used' => $usedSick,
+            'remaining' => $remainingSick,
+            'year' => $currentYear
+        ];
+    }
+
+    public function getEmergencyLeaveBalance(): array
+    {
+        $currentYear = date('Y');
+        
+        // الإجازة الطارئة (5 أيام سنوياً)
+        $emergencyEntitlement = 5;
+        
+        $usedEmergency = $this->leaves()
+                             ->where('leave_type', 'emergency')
+                             ->where('status', 'approved')
+                             ->whereYear('start_date', $currentYear)
+                             ->sum('total_days');
+        
+        $remainingEmergency = max(0, $emergencyEntitlement - $usedEmergency);
+        
+        return [
+            'entitled' => $emergencyEntitlement,
+            'used' => $usedEmergency,
+            'remaining' => $remainingEmergency,
+            'year' => $currentYear
+        ];
+    }
+
+    public function getAllLeaveBalances(): array
+    {
+        return [
+            'annual' => $this->getAnnualLeaveBalance(),
+            'sick' => $this->getSickLeaveBalance(),
+            'emergency' => $this->getEmergencyLeaveBalance()
+        ];
+    }
+
+    /**
+     * إشعارات الموظف
+     */
+    public function getUnreadNotificationsCount(): int
+    {
+        return $this->notifications()->unread()->count();
+    }
+
+    public function getRecentNotifications(int $limit = 10): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->notifications()
+                   ->notExpired()
+                   ->orderBy('created_at', 'desc')
+                   ->limit($limit)
+                   ->get();
+    }
+
+    public function hasUrgentNotifications(): bool
+    {
+        return $this->notifications()
+                   ->unread()
+                   ->where('priority', 'urgent')
+                   ->exists();
+    }
+
+    /**
+     * الشهادات والطلبات
+     */
+    public function getPendingCertificatesCount(): int
+    {
+        return $this->certificates()->pending()->count();
+    }
+
+    public function getCompletedCertificatesCount(): int
+    {
+        return $this->certificates()->completed()->count();
     }
 
     public function getLatestPayroll(): ?Payroll
