@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             EmployeePermissionSeeder::class,
             LegalDocumentSeeder::class,
             EmployeeSeeder::class,
+            LeaveSeeder::class,
         ]);
 
         $this->command->info('');
