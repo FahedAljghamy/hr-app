@@ -20,6 +20,10 @@ class DatabaseSeeder extends Seeder
             TenantSeeder::class,
             RolePermissionSeeder::class,
             UserSeeder::class,
+            CompanyManagementSeeder::class,
+            EmployeePermissionSeeder::class,
+            LegalDocumentSeeder::class,
+            EmployeeSeeder::class,
         ]);
 
         $this->command->info('');

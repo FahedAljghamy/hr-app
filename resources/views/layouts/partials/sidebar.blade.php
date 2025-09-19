@@ -83,12 +83,42 @@
             </div>
         </div>
     </li>
-    @endcanany
+        @endcanany
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+        <!-- Divider -->
+        <hr class="sidebar-divider">
 
-    <!-- Nav Item - Company Management -->
+        <!-- Nav Item - Employee Management -->
+        @canany(['employees.view', 'payrolls.view'])
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEmployeeManagement" aria-expanded="true" aria-controls="collapseEmployeeManagement">
+                <i class="fas fa-fw fa-users"></i>
+                <span>{{ trans('messages.Employee Management') }}</span>
+            </a>
+            <div id="collapseEmployeeManagement" class="collapse" aria-labelledby="headingEmployeeManagement" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">{{ trans('messages.Employee Options') }}:</h6>
+                    @can('employees.view')
+                    <a class="collapse-item" href="{{ route('employees.index') }}">{{ trans('messages.All Employees') }}</a>
+                    @endcan
+                    @can('employees.create')
+                    <a class="collapse-item" href="{{ route('employees.create') }}">{{ trans('messages.Add Employee') }}</a>
+                    @endcan
+                    @can('payrolls.view')
+                    <a class="collapse-item" href="{{ route('payrolls.index') }}">{{ trans('messages.Payroll Management') }}</a>
+                    @endcan
+                    @can('payrolls.create')
+                    <a class="collapse-item" href="{{ route('payrolls.create') }}">{{ trans('messages.Create Payroll') }}</a>
+                    @endcan
+                </div>
+            </div>
+        </li>
+        @endcanany
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Nav Item - Company Management -->
     @canany(['branches.view', 'company.settings.view'])
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCompanyManagement" aria-expanded="true" aria-controls="collapseCompanyManagement">
@@ -136,13 +166,56 @@
         </div>
     </li>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
+        <!-- Employee Dashboard (for regular employees) -->
+        @if(auth()->user()->user_type === 'employee')
+        <!-- Divider -->
+        <hr class="sidebar-divider">
 
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            {{ trans('messages.My Dashboard') }}
+        </div>
+
+        <!-- Nav Item - Employee Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('employee-dashboard.index') }}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>{{ trans('messages.My Dashboard') }}</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - My Profile -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('employee-dashboard.profile') }}">
+                <i class="fas fa-fw fa-user"></i>
+                <span>{{ trans('messages.My Profile') }}</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - My Payrolls -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('employee-dashboard.payrolls') }}">
+                <i class="fas fa-fw fa-money-bill-wave"></i>
+                <span>{{ trans('messages.My Payrolls') }}</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - My Documents -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('employee-dashboard.documents') }}">
+                <i class="fas fa-fw fa-file-alt"></i>
+                <span>{{ trans('messages.My Documents') }}</span>
+            </a>
+        </li>
+        @endif
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
 
 </ul>
 <!-- End of Sidebar -->

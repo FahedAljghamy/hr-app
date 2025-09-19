@@ -66,10 +66,12 @@ class RolePermissionSeeder extends Seeder
             'leaves.approve',
             
             // إدارة الرواتب
-            'payroll.view',
-            'payroll.create',
-            'payroll.edit',
-            'payroll.delete',
+            'payrolls.view',
+            'payrolls.create',
+            'payrolls.edit',
+            'payrolls.delete',
+            'payrolls.approve',
+            'payrolls.process',
             
             // التقارير
             'reports.view',
@@ -112,7 +114,8 @@ class RolePermissionSeeder extends Seeder
             'attendance.edit',
             'leaves.view',
             'leaves.approve',
-            'payroll.view',
+            'payrolls.view',
+            'payrolls.approve',
             'reports.view',
             'reports.export',
         ];
