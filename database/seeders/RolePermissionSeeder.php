@@ -74,6 +74,16 @@ class RolePermissionSeeder extends Seeder
             // التقارير
             'reports.view',
             'reports.export',
+            
+            // إدارة الفروع
+            'branches.view',
+            'branches.create',
+            'branches.edit',
+            'branches.delete',
+            
+            // إعدادات الشركة
+            'company.settings.view',
+            'company.settings.edit',
         ];
 
         // إنشاء كل الصلاحيات

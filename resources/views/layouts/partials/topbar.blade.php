@@ -87,28 +87,64 @@
 
         <!-- Nav Item - Alerts -->
         <li class="nav-item dropdown no-arrow mx-1">
+            @php
+                $expiringDocuments = \App\Models\LegalDocument::expiringSoon(30)->get();
+                $expiredDocuments = \App\Models\LegalDocument::expired()->get();
+                $totalAlerts = $expiringDocuments->count() + $expiredDocuments->count();
+            @endphp
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">3+</span>
+                @if($totalAlerts > 0)
+                <span class="badge badge-danger badge-counter">{{ $totalAlerts > 9 ? '9+' : $totalAlerts }}</span>
+                @endif
             </a>
             <!-- Dropdown - Alerts -->
             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
-                    {{ __('Alerts Center') }}
+                    {{ trans('messages.Document Alerts') }}
                 </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="mr-3">
-                        <div class="icon-circle bg-primary">
-                            <i class="fas fa-file-alt text-white"></i>
+                
+                @if($totalAlerts > 0)
+                    <!-- Expired Documents -->
+                    @foreach($expiredDocuments->take(3) as $document)
+                    <a class="dropdown-item d-flex align-items-center" href="{{ route('legal-documents.show', $document) }}">
+                        <div class="mr-3">
+                            <div class="icon-circle bg-danger">
+                                <i class="fas fa-exclamation-triangle text-white"></i>
+                            </div>
                         </div>
+                        <div>
+                            <div class="small text-gray-500">{{ trans('messages.Expired') }} - {{ $document->expiry_date->format('Y-m-d') }}</div>
+                            <span class="font-weight-bold">{{ $document->document_name }}</span>
+                        </div>
+                    </a>
+                    @endforeach
+                    
+                    <!-- Expiring Soon Documents -->
+                    @foreach($expiringDocuments->take(3) as $document)
+                    <a class="dropdown-item d-flex align-items-center" href="{{ route('legal-documents.show', $document) }}">
+                        <div class="mr-3">
+                            <div class="icon-circle bg-warning">
+                                <i class="fas fa-clock text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="small text-gray-500">{{ trans('messages.Expires in') }} {{ $document->days_until_expiry }} {{ trans('messages.days') }}</div>
+                            <span class="font-weight-bold">{{ $document->document_name }}</span>
+                        </div>
+                    </a>
+                    @endforeach
+                    
+                    <a class="dropdown-item text-center small text-gray-500" href="{{ route('legal-documents.index') }}">
+                        {{ trans('messages.View All Documents') }}
+                    </a>
+                @else
+                    <div class="dropdown-item text-center text-gray-500">
+                        <i class="fas fa-check-circle text-success mr-2"></i>
+                        {{ trans('messages.All documents are up to date') }}
                     </div>
-                    <div>
-                        <div class="small text-gray-500">{{ __('December 12, 2019') }}</div>
-                        {{ __('A new monthly report is ready to download!') }}
-                    </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">{{ __('Show All Alerts') }}</a>
+                @endif
             </div>
         </li>
 
